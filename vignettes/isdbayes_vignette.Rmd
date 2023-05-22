@@ -18,15 +18,21 @@ knitr::opts_chunk$set(
 library(isdbayes)
 library(brms)
 library(tidyverse)
+```
 
+# simulate a single size distribution
+
+```{r}
 # simulate a single size distribution
 isd_data = tibble(x = rparetocounts()) %>% 
   mutate(xmin = min(x), # xmin
          xmax = max(x)) %>% #xmax
   group_by(x) %>% 
   add_tally(name = "counts") # get counts of each body size. If all sizes are unique, this is just 1. This is where size densities would also go
+```
 
 # estimate lambda
+```{r}
 fit = brm(x | vreal(counts, xmin, xmax) ~ 1, 
           data = isd_data,
           stanvars = stanvars,
@@ -34,7 +40,7 @@ fit = brm(x | vreal(counts, xmin, xmax) ~ 1,
 
 
 # simulate multiple size distributions
-x1 = rparetocounts(, mu = -1.8)
+x1 = rparetocounts(mu = -1.8) # `mu` is required wording from brms. in this case it really means the lambda exponent of the ISD
 x2 = rparetocounts(mu = -1.5)
 x3 = rparetocounts(mu = -1.2)
 
@@ -55,12 +61,16 @@ fit2 = brm(x | vreal(counts, xmin, xmax) ~ group,
            stanvars = stanvars,
            family = paretocounts(),
            chains = 1, iter = 1000)
+```
 
-
-# fit hierarchical
+```{r}
 fit2 = brm(x | vreal(counts, xmin, xmax) ~ (1|group), 
            data = isd_data,
            stanvars = stanvars,
            family = paretocounts(),
            chains = 1, iter = 1000)
 ```
+```
+
+# fit hierarchical
+
