@@ -23,9 +23,9 @@ library(tidyverse)
 ```
 
 # simulate a single size distribution
+This simulates data with rparetocounts(), which takes values of n, mu, vreal2, and vreal3. n is the number of body sizes to simulate, mu is lambda, vreal2 is xmin, and vreal3 is xmax. The use of "mu" and "vreal2" and "vreal3" is required by brms to represent the quantities of interest, so those terms are used in this package (which can be confusing).
 
 ```{r}
-# simulate a single size distribution
 isd_data = tibble(x = rparetocounts()) %>% 
   mutate(xmin = min(x), # xmin
          xmax = max(x)) %>% #xmax
