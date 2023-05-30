@@ -1,16 +1,15 @@
 Package: isdbayes
-Title: Fit Hierarchical Bayesian Models of Individual Size Distributions
+Title: What the Package Does (One Line, Title Case)
 Version: 0.0.0.9000
 Authors@R: 
-    person("Jeff", "Wesner", , "jeff.wesner@usd.edu", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0001-6058-7972"))
-Description: Adds a truncated pareto log probability density function to brms. This allows size spectra to be analyzed individually or across predictors using standard brms (or lmer) syntax.
-License: `use_mit_license()`
+    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
+           comment = c(ORCID = "YOUR-ORCID-ID"))
+Description: What the package does (one paragraph).
+License: use_mit_license()
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
-Suggests: 
-    knitr,
-    rmarkdown
-VignetteBuilder: knitr
 Imports: brms
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
