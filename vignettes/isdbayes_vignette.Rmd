@@ -69,9 +69,13 @@ fit2 = brm(x | vreal(counts, xmin, xmax) ~ group,
            chains = 1, iter = 1000)
 ```
 
+```{r}
+conditional_effects(fit2)
+```
+
 # fit multiple size distributions with a varying intercept
 ```{r}
-fit2 = brm(x | vreal(counts, xmin, xmax) ~ (1|group), 
+fit3 = brm(x | vreal(counts, xmin, xmax) ~ (1|group), 
            data = isd_data,
            stanvars = stanvars,
            family = paretocounts(),
