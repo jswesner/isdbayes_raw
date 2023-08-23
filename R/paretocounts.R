@@ -10,11 +10,11 @@ rparetocounts <- function(n = 300, mu = -1.2, vreal2 = 1, vreal3 = 1000) {
   {
     if(vreal2 <= 0 | vreal2 >= vreal3) stop("Parameters out of bounds in rPLB")
     u <- stats::runif(n)
-    if(mu != -1)
-    { y <- ( u*vreal3^(mu+1) +  (1-u) * vreal2^(mu+1) ) ^ (1/(mu+1))
-    } else
-    { y <- vreal3^u * vreal2^(1-u)
-    }
+    # if(mu != -1){
+     y <- ( u*vreal3^(mu+1) +  (1-u) * vreal2^(mu+1) ) ^ (1/(mu+1))
+    # } else
+    # { y <- vreal3^u * vreal2^(1-u)
+    # }
     return(y)
   }
   return(samples)
@@ -40,8 +40,11 @@ dparetocounts <- function(x, mu, vreal2, vreal3) {
 #' @export
 log_lik_paretocounts <- function(i, prep) {
   mu <- brms::get_dpar(prep, "mu", i = i)
-  y <- prep$data$Y[i]
-  dparetocounts(x, mu, vreal2, vreal3)
+  vreal1 <- prep$data$vreal1[i]
+  vreal2 <- prep$data$vreal2[i]
+  vreal3 <- prep$data$vreal3[i]
+  Y <- prep$data$Y[i]
+  paretocounts_lpdf(Y, mu, vreal1, vreal2, vreal3)
 }
 
 #' @export
@@ -82,5 +85,10 @@ paretocounts <- function(){brms::custom_family(
   # posterior_predict = posterior_predict_paretocounts,
   # posterior_epred = posterior_epred_paretocounts,
   # log_lik = log_lik_paretocounts
-  )
+)
 }
+
+
+pp_check(fit, type = "boxplot")
+
+
