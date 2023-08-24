@@ -35,7 +35,7 @@ isd_data = tibble(x = rparetocounts()) %>%
 
 # estimate lambda
 ```{r}
-fit = brm(x | vreal(counts, xmin, xmax) ~ 1, 
+fit1 = brm(x | vreal(counts, xmin, xmax) ~ 1, 
           data = isd_data,
           stanvars = stanvars,
           family = paretocounts(),
@@ -104,4 +104,62 @@ posts_varint %>%
 ```
 
 
+# Posterior predictive checks
+After the model is fit, you can use built-in functions in brms to perform model checking.
+```{r}
+pp_check(fit2, type = "dens_overlay_grouped", group = "group")
+```
+
+# Model Comparison
+(This needs to be verified) You can also perform model selection:
+```{r}
+WAIC(fit2)
+WAIC(fit3)
+
+```
+
+
+# plot the isd
+Lambda represents the rate of decline in relative abundance as body size increases, but because it doesn't have units like hour, second, height, etc., it is somewhat abstract. It can be easier to see the variation by plotting the probability that a body size X is greater than or equal to another body size x. This code produces the posterior distribution of these so-called "isd plots."
+
+```{r}
+# get posterior predictions using add_epred_draws
+fit2_posts = fit2$data %>% 
+  distinct(group) %>% # optional groups
+  mutate(counts = 1, # placeholder
+         xmin = 1, # placeholder
+         xmax = 1000) %>% # placeholder
+  add_epred_draws(fit2)
+
+# get posterior of prob X>=x
+prob_yx_posts = get_isd_posts(fit2_posts)
+
+
+# plot
+prob_yx_posts %>% 
+  ggplot(aes(x = xPLB, y = prob_yx)) +
+  geom_line(aes(group = interaction(group, .draw))) +
+  facet_grid(~group) +
+  scale_x_log10() +
+  scale_y_log10()
+
+```
+
+# add data to isd plot
+```{r}
+# get prob X>=x or Num X>=x from data
+isd_data = fit2$data %>%
+  group_by(group) %>% 
+  get_isd_data(resp = x)
+
+
+# plot
+prob_yx_posts %>% 
+  ggplot(aes(x = xPLB, y = prob_yx)) +
+  geom_line(aes(group = interaction(group, .draw))) +
+  facet_grid(~group) +
+  scale_x_log10() +
+  scale_y_log10() +
+  geom_point(data = isd_data, aes(x = x), color = "yellow", size = 1)
+```
 
