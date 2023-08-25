@@ -89,6 +89,5 @@ paretocounts <- function(){brms::custom_family(
 }
 
 
-pp_check(fit, type = "boxplot")
 
 
