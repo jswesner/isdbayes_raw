@@ -7,7 +7,7 @@ get_isd_posts = function(data = NULL,
                          length = 300,
                          lambda = .epred){
   {{data}} %>%
-    expand_grid(xPLB = seq(unique(.$xmin), unique(.$xmax), length = 300)) %>%
+    expand_grid(x.PLB = seq(unique(.$xmin), unique(.$xmax), length = 300)) %>%
     mutate(prob_yx = (1 - (x.PLB^({{lambda}} + 1) - (xmin^({{lambda}}+1)))/(xmax^({{lambda}} + 1) - (xmin^({{lambda}}+1)))))
 
 }
